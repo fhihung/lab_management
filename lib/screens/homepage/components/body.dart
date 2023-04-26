@@ -1,85 +1,73 @@
+import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:http/http.dart' as http;
+
+import '../../../models/user.dart';
 
 class Body extends StatefulWidget {
-  const Body({super.key});
-
   @override
-  State<Body> createState() => _BodyState();
+  _BodyState createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
-  final List<String> ids = <String>['ST010', 'ST025', 'ST001'];
-  final List<String> nameEm = <String>[
-    'Vương Tuấn Cường',
-    'Nguyễn Phi Hùng',
-    'Phạm Ngọc Việt'
-  ];
-  final List<String> times = <String>['9:00', '10:00', '11:00'];
-  final Map<String, List<List<String>>> jsonData = {
-    "data": [
-      [
-        "ST010",
-        "Vương Tuấn Cường",
-        "Student",
-        "21011490@st.phenikaa-uni.edu.vn",
-        "Thu, 20 Apr 2023 20:38:05 GMT"
-      ],
-      [
-        "ST022",
-        "Nguyễn Hoàng Dương",
-        "Student",
-        "student@st.phenikaa-uni.edu.vn",
-        "Thu, 20 Apr 2023 20:29:15 GMT"
-      ],
-      [
-        "ST025",
-        "Nguyễn Phi Hùng",
-        "Student",
-        "21010598@st.phenikaa-uni.edu.vn",
-        "Thu, 20 Apr 2023 19:05:42 GMT"
-      ],
-      [
-        "ST025",
-        "Nguyễn Phi Hùng",
-        "Student",
-        "21010598@st.phenikaa-uni.edu.vn",
-        "Thu, 20 Apr 2023 18:23:36 GMT"
-      ],
-    ]
-  };
+  var url = Uri.parse('http://10.20.34.13:8001/timekeeping');
+  StreamController<List<User>> _streamController = StreamController.broadcast();
+  List<User> _students = [];
+
+  Future<void> _getStudents() async {
+    var result = await http.get(url);
+    if (result.statusCode == 200) {
+      var jsonData = json.decode(result.body)["data"];
+      List<User> students = [];
+      for (var item in jsonData) {
+        students.add(User.fromJson(item));
+      }
+      _streamController.add(students);
+    } else {
+      throw Exception('Failed to load students');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getStudents();
+
+    Timer.periodic(Duration(seconds: 5), (_) {
+      _getStudents();
+    });
+  }
+
+  @override
+  void dispose() {
+    _streamController.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    print(jsonData["data"]);
-    return Container(
-        child: ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: 3,
+    return StreamBuilder<List<User>>(
+      stream: _streamController.stream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _students = snapshot.data!;
+          return ListView.builder(
+            // reverse: true,
+            itemCount: _students.length,
             itemBuilder: (BuildContext context, int index) {
-              return Card(
-                  elevation: 0,
-                  child: ListTile(
-                    title: Text(nameEm[index]),
-                    subtitle: Text('Student'),
-                    leading: Container(
-                      child: Center(
-                        child: Text(
-                          ids[index],
-                        ),
-                      ),
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(0xff5884f3),
-                      ),
-                    ),
-                    trailing: Text(times[index]),
-                  ));
-            }));
+              return ListTile(
+                title: Text(_students[index].name!),
+                subtitle: Text(_students[index].email!),
+              );
+            },
+          );
+        } else if (snapshot.hasError) {
+          return Center(child: Text('${snapshot.error}'));
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
   }
 }
