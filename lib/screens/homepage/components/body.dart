@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../constant.dart';
 import '../../../models/user.dart';
 
 class Body extends StatefulWidget {
@@ -56,9 +57,20 @@ class _BodyState extends State<Body> {
             // reverse: true,
             itemCount: _students.length,
             itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                title: Text(_students[index].name!),
-                subtitle: Text(_students[index].email!),
+              return Container(
+                margin: EdgeInsets.all(5),
+                child: Card(
+                  elevation: 1,
+                  shadowColor: kPrimaryColor,
+                  child: ListTile(
+                    title: Text(
+                      _students[index].name!,
+                      style: TextStyle(
+                          color: kPrimaryColor, fontWeight: FontWeight.w600),
+                    ),
+                    subtitle: Text(_students[index].date!),
+                  ),
+                ),
               );
             },
           );

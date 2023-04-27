@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'constant.dart';
+import '../constant.dart';
 
 class TAppTheme {
   TAppTheme._();
@@ -21,10 +21,11 @@ class TAppTheme {
           fontFamily: 'Poppins',
           fontWeight: FontWeight.bold),
       headline2: TextStyle(
-          color: Color(0xff5884f3),
-          fontSize: 15,
-          fontFamily: 'Poppins',
-          fontWeight: FontWeight.w600),
+        color: Color(0xff5884f3),
+        fontSize: 15,
+        fontFamily: 'Poppins',
+        // fontWeight: FontWeight.w600,
+      ),
       headline3: TextStyle(
           color: Colors.black,
           fontSize: 15,
