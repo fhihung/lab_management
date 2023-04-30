@@ -1,0 +1,137 @@
+import 'dart:async';
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import '../../../constant.dart';
+import '../../../models/user.dart';
+import 'stream_attendance.dart';
+
+class Body extends StatefulWidget {
+  @override
+  _BodyState createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  DateTime? _selectedDate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: StreamBuilder<List<Attendance>>(
+        stream: fetchAttendance(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<Attendance>? attendanceList = snapshot.data;
+
+            // Chỉ lấy phần tử cuối cùng của mỗi id trong ngày được chọn
+            Map<String, Attendance> lastAttendanceMap = {};
+            for (Attendance attendance in attendanceList!) {
+              if (_selectedDate == null ||
+                  DateFormat('yyyy-MM-dd').format(attendance.timestamp) ==
+                      DateFormat('yyyy-MM-dd').format(_selectedDate!)) {
+                lastAttendanceMap[attendance.id] = attendance;
+              }
+            }
+            List<Attendance> lastAttendanceList =
+                lastAttendanceMap.values.toList();
+
+            return Column(
+              children: [
+                SizedBox(height: 20),
+                TextButton(
+                  child: Text(
+                    _selectedDate == null
+                        ? 'Select Date'
+                        : DateFormat('yyyy-MM-dd').format(_selectedDate!),
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  onPressed: () async {
+                    final DateTime? picked = await pickDate(context);
+                    if (picked != null) {
+                      setState(() {
+                        _selectedDate = picked;
+                      });
+
+                      // Tìm kiếm danh sách chấm công cho ngày được chọn
+                      List<Attendance> attendanceList = snapshot.data!;
+                      List<Attendance> dailyAttendanceList = attendanceList
+                          .where((a) =>
+                              DateFormat('yyyy-MM-dd').format(a.timestamp) ==
+                              DateFormat('yyyy-MM-dd').format(_selectedDate!))
+                          .toList();
+
+                      // Hiển thị AlertDialog nếu không có dữ liệu
+                      if (dailyAttendanceList.isEmpty) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('No attendance data'),
+                            content: Text(
+                                'There is no attendance data for the selected date.'),
+                            actions: [
+                              TextButton(
+                                child: Text('OK'),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    }
+                  },
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: lastAttendanceList.length,
+                    itemBuilder: (context, index) {
+                      Attendance attendance = lastAttendanceList[index];
+
+                      // Tính thời gian làm việc trong ngày được chọn
+                      List<Attendance> dailyAttendanceList = attendanceList
+                          .where((a) =>
+                              a.id == attendance.id &&
+                              DateFormat('yyyy-MM-dd').format(a.timestamp) ==
+                                  DateFormat('yyyy-MM-dd')
+                                      .format(_selectedDate!))
+                          .toList();
+                      DateTime startTime = dailyAttendanceList.first.timestamp;
+                      DateTime endTime = dailyAttendanceList.last.timestamp;
+                      Duration workDuration = endTime.difference(startTime);
+
+                      // Hiển thị chấm công và thời gian làm việc tương ứng
+                      return ListTile(
+                        title: Text(attendance.name),
+                        subtitle: Text(
+                            'Checked in at ${DateFormat('h:mm a').format(attendance.timestamp)}'),
+                        trailing: Text(
+                            '${workDuration.inHours}h ${workDuration.inMinutes.remainder(60)}m'),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          } else if (snapshot.hasError) {
+            return Text('${snapshot.error}');
+          }
+
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      ),
+    );
+  }
+
+  Future<DateTime?> pickDate(BuildContext context) async {
+    DateTime? initialDate = _selectedDate ?? DateTime.now();
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: DateTime(2021),
+      lastDate: DateTime(2030),
+    );
+    return picked;
+  }
+}

@@ -1,6 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lab_management/constant.dart';
+
 import 'package:lab_management/screens/login/component/new.dart';
+import 'package:lab_management/screens/login/component/format_dialog.dart';
+import '../../attendance/attendance_screen.dart';
 import '../../login/component/account_check.dart';
 import '../../login/component/forgot_button.dart';
 import '../../login/component/or_divider.dart';
@@ -19,10 +23,13 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  bool _isLoading = false;
   String email = '';
   String pass = '';
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _passwordConfirmController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -63,38 +70,58 @@ class _BodyState extends State<Body> {
               height: size.height * 0.02,
             ),
             RoundedPasswordField(
+              controller: _passwordConfirmController,
               textField: 'Confirm Password',
               onChanged: (value) {},
             ),
             SizedBox(
               height: size.height * 0.03,
             ),
-            RoundedButton(
-              press: () async {
-                try {
-                  UserCredential userCredential = await FirebaseAuth.instance
-                      .createUserWithEmailAndPassword(
-                    email: email,
-                    password: pass,
-                  );
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return NewPage();
-                      },
-                    ),
-                  );
-                } on FirebaseAuthException catch (e) {
-                  if (e.code == 'weak-password') {
-                    print('Password week');
-                  } else if (e.code == "email-already-in-use") {
-                    print('Account exists');
-                  }
-                }
-              },
-              text: 'SIGN UP',
-            ),
+            _isLoading
+                ? CircularProgressIndicator(
+                    backgroundColor: kPrimaryColor,
+                  )
+                : RoundedButton(
+                    press: () async {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      if (_passwordController.text !=
+                          _passwordConfirmController.text) {
+                        FormatDialog(
+                          text: 'Resigter Failed',
+                          subtext:
+                              'Password does not match, Please check again',
+                        );
+                      }
+                      try {
+                        UserCredential userCredential = await FirebaseAuth
+                            .instance
+                            .createUserWithEmailAndPassword(
+                          email: email,
+                          password: pass,
+                        );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return AttendanceScreen();
+                            },
+                          ),
+                        );
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'weak-password') {
+                          print('Password week');
+                        } else if (e.code == "email-already-in-use") {
+                          print('Account exists');
+                        }
+                      }
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    },
+                    text: 'SIGN UP',
+                  ),
             AccountCheck(
               text: 'Already have an account?',
               textBtn: ' Log in',

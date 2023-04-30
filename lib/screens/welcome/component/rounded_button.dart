@@ -16,6 +16,7 @@ class RoundedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool _isLoading = false;
     Size size = MediaQuery.of(context).size;
     return Container(
       padding: EdgeInsets.symmetric(vertical: 5),

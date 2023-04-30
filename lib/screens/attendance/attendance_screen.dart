@@ -5,8 +5,8 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'components/body.dart';
 import 'components/homepage_appbar.dart';
 
-class HomePageScreen extends StatelessWidget {
-  const HomePageScreen({super.key});
+class AttendanceScreen extends StatelessWidget {
+  const AttendanceScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
