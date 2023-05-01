@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../login/login_screen.dart';
 
-class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const HomePageAppBar({
+class AttendanceAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const AttendanceAppBar({
     super.key,
   });
   Size get preferredSize => Size.fromHeight(60.0);

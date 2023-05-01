@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lab_management/constant.dart';
 
-import 'package:lab_management/screens/login/component/new.dart';
 import 'package:lab_management/screens/login/component/format_dialog.dart';
 import '../../attendance/attendance_screen.dart';
 import '../../login/component/account_check.dart';

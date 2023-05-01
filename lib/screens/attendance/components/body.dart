@@ -3,17 +3,19 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:lab_management/screens/homepage/component/body.dart';
+import 'package:lab_management/widgets/date_picker.dart';
 import '../../../constant.dart';
 import '../../../models/user.dart';
 import 'stream_attendance.dart';
 
-class Body extends StatefulWidget {
+class Bodys extends StatefulWidget {
   @override
-  _BodyState createState() => _BodyState();
+  BodysState createState() => BodysState();
 }
 
-class _BodyState extends State<Body> {
-  DateTime? _selectedDate;
+class BodysState extends State<Bodys> {
+  DateTime? _selectedDate = BodyState.choosenDate;
 
   @override
   Widget build(BuildContext context) {

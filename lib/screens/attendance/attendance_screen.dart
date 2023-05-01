@@ -3,7 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 import 'components/body.dart';
-import 'components/homepage_appbar.dart';
+import 'components/attendance_appbar.dart';
 
 class AttendanceScreen extends StatelessWidget {
   const AttendanceScreen({super.key});
@@ -11,8 +11,8 @@ class AttendanceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HomePageAppBar(),
-      body: Body(),
+      appBar: AttendanceAppBar(),
+      body: Bodys(),
     );
   }
 }

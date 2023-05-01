@@ -3,16 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../attendance/attendance_screen.dart';
 import '../../forgot/forgot_screen.dart';
-
 import '../../sign_up/sign_up_screen.dart';
 import '../../welcome/component/rounded_button.dart';
 import '../login_screen.dart';
 import '/constant.dart';
-
 import 'account_check.dart';
 import 'forgot_button.dart';
-import 'main_page.dart';
-import 'new.dart';
 import 'format_dialog.dart';
 import 'or_divider.dart';
 import 'round_outline_button.dart';

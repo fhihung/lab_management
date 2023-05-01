@@ -13,31 +13,36 @@ class TAppTheme {
     textTheme: TextTheme(
       labelMedium:
           TextStyle(color: Colors.black54, fontSize: 15, fontFamily: 'Poppins'),
-      button: TextStyle(
+      labelLarge: TextStyle(
           color: Color(0xff5884f3), fontSize: 16, fontFamily: 'Poppins'),
-      headline1: TextStyle(
+      displayLarge: TextStyle(
           color: Color(0xff5884f3),
           fontSize: 20,
           fontFamily: 'Poppins',
           fontWeight: FontWeight.bold),
-      headline2: TextStyle(
+      displayMedium: TextStyle(
         color: Color(0xff5884f3),
         fontSize: 15,
         fontFamily: 'Poppins',
         // fontWeight: FontWeight.w600,
       ),
-      headline3: TextStyle(
+      displaySmall: TextStyle(
           color: Colors.black,
           fontSize: 15,
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w700),
-      headline4: TextStyle(
+      headlineMedium: TextStyle(
           color: Colors.black,
           fontSize: 18,
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w600),
-      headline5: TextStyle(
+      headlineSmall: TextStyle(
           color: Colors.black,
+          fontSize: 20,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w700),
+      bodyMedium: TextStyle(
+          color: kSecondaryColor,
           fontSize: 20,
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w700),
