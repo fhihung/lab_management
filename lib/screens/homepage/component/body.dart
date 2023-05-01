@@ -2,9 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+
 import 'package:lab_management/constant.dart';
 import 'package:lab_management/screens/attendance/attendance_screen.dart';
 import 'package:lab_management/screens/homepage/component/home_appbar.dart';
+import 'package:lab_management/widgets/format_dialog.dart';
+
+import '../../../widgets/button_menu.dart';
 import 'ngay_ca_nhan.dart';
 
 class Body extends StatefulWidget {
@@ -90,100 +94,155 @@ class BodyState extends State<Body> {
             ),
           ),
           Expanded(
+            flex: 1,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Container(
                 color: Color.fromARGB(255, 235, 235, 235),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 20),
-                          child: Text(
-                            'Menu',
-                            style: Theme.of(context).textTheme.headlineMedium,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-                      margin:
-                          EdgeInsets.symmetric(horizontal: size.width * 0.08),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.white,
-                      ),
-                      child: Row(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Icon(Icons.calendar_month),
-                          SizedBox(width: 18),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          Container(
+                            margin: EdgeInsets.only(
+                                right: 20, left: 30, bottom: 10, top: 10),
+                            child: Text(
+                              'Menu',
+                              style: Theme.of(context).textTheme.headlineMedium,
+                            ),
+                          ),
+                        ],
+                      ),
+                      GestureDetector(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 12),
+                          margin: EdgeInsets.only(
+                              left: size.width * 0.08,
+                              right: size.width * 0.08,
+                              bottom: size.height * 0.023),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.white,
+                          ),
+                          child: Row(
                             children: [
-                              Text(
-                                'Thông tin check-in',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Poppins',
+                              Expanded(
+                                flex: 1,
+                                child: Icon(Icons.calendar_month),
+                              ),
+                              Expanded(child: SizedBox(width: 18)),
+                              Expanded(
+                                flex: 8,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Check-in Information',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      child: Text(
+                                        BodyState.choosenDate != null
+                                            ? 'Selected Date: ${DateFormat('dd/MM/yyyy').format(BodyState.choosenDate!)}'
+                                            : 'Please Choose Date',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                      ),
+                                      onTap: () async {
+                                        final DateTime? picked =
+                                            await showDatePicker(
+                                          context: context,
+                                          initialDate: DateTime.now(),
+                                          firstDate: DateTime(2000),
+                                          lastDate: DateTime(2100),
+                                        );
+                                        if (picked != null &&
+                                            picked != BodyState.choosenDate) {
+                                          setState(() {
+                                            BodyState.choosenDate = picked;
+                                          });
+                                        }
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ),
+                              Expanded(
+                                  flex: 1,
+                                  child: SizedBox(
+                                    width: 2,
+                                  )),
                               GestureDetector(
-                                child: Text(
-                                  choosenDate != null
-                                      ? 'Selected Date: ${DateFormat('dd/MM/yyyy').format(choosenDate!)}'
-                                      : 'Please Choose Date',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w300,
+                                onTap: () {
+                                  BodyState.choosenDate != null
+                                      ? Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) {
+                                              return AttendanceScreen();
+                                            },
+                                          ),
+                                        )
+                                      : showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return FormatDialog(
+                                              styleText: TextStyle(
+                                                  fontSize: 20.0,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black),
+                                              styleSubText: TextStyle(
+                                                  fontSize: 16.0,
+                                                  color: Colors.black),
+                                              text: "Failed",
+                                              subtext: "Please pick the date!",
+                                            );
+                                          },
+                                        );
+                                },
+                                child: Container(
+                                  child: Icon(
+                                    Icons.arrow_circle_right_sharp,
+                                    color: kPrimaryColor,
+                                    size: 35,
                                   ),
                                 ),
-                                onTap: () async {
-                                  final DateTime? picked = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(2000),
-                                    lastDate: DateTime(2100),
-                                  );
-                                  if (picked != null && picked != choosenDate) {
-                                    setState(() {
-                                      choosenDate = picked;
-                                    });
-                                  }
-                                },
                               ),
                             ],
                           ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return AttendanceScreen();
-                                  },
-                                ),
-                              );
-                            },
-                            child: Container(
-                              child: Icon(Icons.arrow_circle_right_sharp,
-                                  color: kPrimaryColor),
-                            ),
-                          )
-                        ],
+                        ),
                       ),
-                    )
-                  ],
+                      ButtonMenu(
+                        icon: Icon(Icons.timeline),
+                        width: 88,
+                        titleText: 'Numerology',
+                        subTitle: 'Một chút tâm linh',
+                      ),
+                      ButtonMenu(
+                        width: 154,
+                        icon: Icon(Icons.menu_book),
+                        titleText: 'Library',
+                        subTitle: 'Tri thức',
+                      ),
+                      ButtonMenu(
+                        width: 144,
+                        icon: Icon(Icons.bookmark_add),
+                        titleText: 'Project',
+                        subTitle: 'Updating',
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

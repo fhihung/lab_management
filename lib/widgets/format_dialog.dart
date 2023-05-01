@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 class FormatDialog extends StatelessWidget {
   String? text;
   String? subtext;
+  TextStyle styleText;
+  TextStyle styleSubText;
 
   FormatDialog({
     Key? key,
     this.text,
     this.subtext,
+    required this.styleText,
+    required this.styleSubText,
   }) : super(key: key);
 
   @override
@@ -29,18 +33,16 @@ class FormatDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              text!,
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            Text(text!, style: styleText
+                // TextStyle(
+                //   fontSize: 20.0,
+                //   fontWeight: FontWeight.bold,
+                // ),
+                ),
             SizedBox(height: 10.0),
-            Text(
-              subtext!,
-              style: TextStyle(fontSize: 16.0),
-            ),
+            Text(subtext!, style: styleSubText
+                // TextStyle(fontSize: 16.0),
+                ),
             SizedBox(height: 20.0),
             TextButton(
               child: Text("OK"),

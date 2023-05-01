@@ -9,7 +9,7 @@ import '../login_screen.dart';
 import '/constant.dart';
 import 'account_check.dart';
 import 'forgot_button.dart';
-import 'format_dialog.dart';
+import '../../../widgets/format_dialog.dart';
 import 'or_divider.dart';
 import 'round_outline_button.dart';
 import 'rounded_input_field.dart';
@@ -114,6 +114,11 @@ class _BodyState extends State<Body> {
                             context: context,
                             builder: (BuildContext context) {
                               return FormatDialog(
+                                styleText: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                styleSubText: TextStyle(fontSize: 16.0),
                                 text: "Login failed",
                                 subtext:
                                     "User not found. Please check your email and try again.",
@@ -125,6 +130,11 @@ class _BodyState extends State<Body> {
                             context: context,
                             builder: (BuildContext context) {
                               return FormatDialog(
+                                styleText: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                styleSubText: TextStyle(fontSize: 16.0),
                                 text: "Login failed",
                                 subtext:
                                     "Wrong email or password. Please check your email or password and try again.",

@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lab_management/constant.dart';
 
-import 'package:lab_management/screens/login/component/format_dialog.dart';
+import '../../../widgets/format_dialog.dart';
 import '../../attendance/attendance_screen.dart';
 import '../../login/component/account_check.dart';
 import '../../login/component/forgot_button.dart';
@@ -89,6 +89,11 @@ class _BodyState extends State<Body> {
                           _passwordConfirmController.text) {
                         FormatDialog(
                           text: 'Resigter Failed',
+                          styleText: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          styleSubText: TextStyle(fontSize: 16.0),
                           subtext:
                               'Password does not match, Please check again',
                         );
