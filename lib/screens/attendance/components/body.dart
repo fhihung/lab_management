@@ -30,8 +30,8 @@ class BodysState extends State<Bodys> {
             Map<String, Attendance> lastAttendanceMap = {};
             for (Attendance attendance in attendanceList!) {
               if (_selectedDate == null ||
-                  DateFormat('yyyy-MM-dd').format(attendance.timestamp) ==
-                      DateFormat('yyyy-MM-dd').format(_selectedDate!)) {
+                  DateFormat('dd/MM/yyyy').format(attendance.timestamp) ==
+                      DateFormat('dd/MM/yyyy').format(_selectedDate!)) {
                 lastAttendanceMap[attendance.id] = attendance;
               }
             }
@@ -45,8 +45,8 @@ class BodysState extends State<Bodys> {
                   child: Text(
                     _selectedDate == null
                         ? 'Select Date'
-                        : DateFormat('yyyy-MM-dd').format(_selectedDate!),
-                    style: TextStyle(fontSize: 18),
+                        : DateFormat('dd/MM/yyyy').format(_selectedDate!),
+                    style: TextStyle(fontSize: 18, color: Colors.black),
                   ),
                   onPressed: () async {
                     final DateTime? picked = await pickDate(context);
@@ -59,8 +59,8 @@ class BodysState extends State<Bodys> {
                       List<Attendance> attendanceList = snapshot.data!;
                       List<Attendance> dailyAttendanceList = attendanceList
                           .where((a) =>
-                              DateFormat('yyyy-MM-dd').format(a.timestamp) ==
-                              DateFormat('yyyy-MM-dd').format(_selectedDate!))
+                              DateFormat('dd/MM/yyyy').format(a.timestamp) ==
+                              DateFormat('dd/MM/yyyy').format(_selectedDate!))
                           .toList();
 
                       // Hiển thị AlertDialog nếu không có dữ liệu
@@ -93,8 +93,8 @@ class BodysState extends State<Bodys> {
                       List<Attendance> dailyAttendanceList = attendanceList
                           .where((a) =>
                               a.id == attendance.id &&
-                              DateFormat('yyyy-MM-dd').format(a.timestamp) ==
-                                  DateFormat('yyyy-MM-dd')
+                              DateFormat('dd/MM/yyyy').format(a.timestamp) ==
+                                  DateFormat('dd/MM/yyyy')
                                       .format(_selectedDate!))
                           .toList();
                       DateTime startTime = dailyAttendanceList.first.timestamp;
@@ -102,12 +102,30 @@ class BodysState extends State<Bodys> {
                       Duration workDuration = endTime.difference(startTime);
 
                       // Hiển thị chấm công và thời gian làm việc tương ứng
-                      return ListTile(
-                        title: Text(attendance.name),
-                        subtitle: Text(
-                            'Checked in at ${DateFormat('h:mm a').format(attendance.timestamp)}'),
-                        trailing: Text(
-                            '${workDuration.inHours}h ${workDuration.inMinutes.remainder(60)}m'),
+                      return Card(
+                        elevation: 1,
+                        child: ListTile(
+                          title: Text(
+                            attendance.name,
+                            style: TextStyle(
+                                color: kPrimaryColor,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          subtitle: Text(
+                            'Checked in at ${DateFormat('h:mm a').format(attendance.timestamp)}',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400),
+                          ),
+                          trailing: Text(
+                            '${workDuration.inHours}h ${workDuration.inMinutes.remainder(60)}m',
+                            style: TextStyle(
+                                color: kPrimaryColor,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ),
                       );
                     },
                   ),
@@ -115,11 +133,21 @@ class BodysState extends State<Bodys> {
               ],
             );
           } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '${snapshot.error}',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ],
+            );
           }
 
           return Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              color: kPrimaryColor,
+            ),
           );
         },
       ),

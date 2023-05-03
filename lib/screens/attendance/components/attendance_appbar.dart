@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lab_management/constant.dart';
 
 import '../../login/login_screen.dart';
 
@@ -34,7 +35,10 @@ class AttendanceAppBar extends StatelessWidget implements PreferredSizeWidget {
             onPressed: () {},
             child: Padding(
               padding: const EdgeInsets.all(9.0),
-              child: Text('Settings'),
+              child: Text(
+                'Settings',
+                style: TextStyle(color: kPrimaryColor),
+              ),
             )),
       ],
       elevation: 0,

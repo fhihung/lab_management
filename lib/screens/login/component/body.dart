@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../attendance/attendance_screen.dart';
 import '../../forgot/forgot_screen.dart';
+import '../../homepage/homepage.dart';
 import '../../sign_up/sign_up_screen.dart';
 import '../../welcome/component/rounded_button.dart';
 import '../login_screen.dart';
@@ -103,7 +104,7 @@ class _BodyState extends State<Body> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return AttendanceScreen();
+                              return HomePageScreen();
                             },
                           ),
                         );
@@ -115,10 +116,13 @@ class _BodyState extends State<Body> {
                             builder: (BuildContext context) {
                               return FormatDialog(
                                 styleText: TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                styleSubText: TextStyle(fontSize: 16.0),
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                                styleSubText: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400),
                                 text: "Login failed",
                                 subtext:
                                     "User not found. Please check your email and try again.",
@@ -131,13 +135,17 @@ class _BodyState extends State<Body> {
                             builder: (BuildContext context) {
                               return FormatDialog(
                                 styleText: TextStyle(
+                                  color: Colors.black,
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                styleSubText: TextStyle(fontSize: 16.0),
+                                styleSubText: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400),
                                 text: "Login failed",
                                 subtext:
-                                    "Wrong email or password. Please check your email or password and try again.",
+                                    "Wrong email or password. Please try again.",
                               );
                             },
                           );

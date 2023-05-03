@@ -4,6 +4,7 @@ import 'package:lab_management/constant.dart';
 
 import '../../../widgets/format_dialog.dart';
 import '../../attendance/attendance_screen.dart';
+import '../../homepage/homepage.dart';
 import '../../login/component/account_check.dart';
 import '../../login/component/forgot_button.dart';
 import '../../login/component/or_divider.dart';
@@ -109,7 +110,7 @@ class _BodyState extends State<Body> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return AttendanceScreen();
+                              return HomePageScreen();
                             },
                           ),
                         );
