@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lab_management/constant.dart';
 
+import '../../homepage/homepage.dart';
 import '../../login/login_screen.dart';
 
 class AttendanceAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -22,7 +23,7 @@ class AttendanceAppBar extends StatelessWidget implements PreferredSizeWidget {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return LoginScreen();
+                return HomePageScreen();
               },
             ),
           );
