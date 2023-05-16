@@ -4,9 +4,11 @@ import 'package:intl/intl.dart';
 import 'package:lab_management/constant.dart';
 import 'package:lab_management/screens/attendance/attendance_screen.dart';
 import 'package:lab_management/screens/homepage/component/home_appbar.dart';
+import 'package:lab_management/screens/welcome/welcome_screen.dart';
 import 'package:lab_management/widgets/format_dialog.dart';
 import 'package:page_transition/page_transition.dart';
 import '../../../widgets/button_menu.dart';
+import '../../login/component/google_sign_in.dart';
 import '../../numerology/numerology_screen.dart';
 import 'ngay_ca_nhan.dart';
 
@@ -33,6 +35,21 @@ class BodyState extends State<Body> {
               color: kSecondaryColor,
             ),
             textTitle: 'Hi, Hung!',
+          ),
+          Container(
+            child: Column(
+              children: [
+                ElevatedButton(
+                  child: Text("logout"),
+                  onPressed: () async {
+                  await FirebaseServices().googleSignOut();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => WelcomeScreen()));
+                },)
+              ],
+            ),
           ),
           SizedBox(
             height: size.height * 0.02,

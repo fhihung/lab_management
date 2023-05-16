@@ -11,6 +11,7 @@ import '/constant.dart';
 import 'account_check.dart';
 import 'forgot_button.dart';
 import '../../../widgets/format_dialog.dart';
+import 'google_sign_in.dart';
 import 'or_divider.dart';
 import 'round_outline_button.dart';
 import 'rounded_input_field.dart';
@@ -30,6 +31,7 @@ class _BodyState extends State<Body> {
   final _passwordController = TextEditingController();
   String email = '';
   String pass = '';
+
   // Future signIn() async {
   //   await FirebaseAuth.instance.signInWithEmailAndPassword(
   //       email: _emailController.text.trim(),
@@ -38,7 +40,9 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return SingleChildScrollView(
       child: Container(
         height: size.height,
@@ -52,7 +56,10 @@ class _BodyState extends State<Body> {
                   top: size.height * 0.06, bottom: size.height * 0.04),
               child: Text(
                 'LOG IN',
-                style: Theme.of(context).textTheme.headline3,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline3,
               ),
             ),
             RoundedInputField(
@@ -89,74 +96,74 @@ class _BodyState extends State<Body> {
             _isLoading
                 ? CircularProgressIndicator()
                 : RoundedButton(
-                    press: () async {
-                      setState(() {
-                        _isLoading = true;
-                      });
-                      try {
-                        UserCredential userCredential = await FirebaseAuth
-                            .instance
-                            .signInWithEmailAndPassword(
-                          email: email,
-                          password: pass,
+              press: () async {
+                setState(() {
+                  _isLoading = true;
+                });
+                try {
+                  UserCredential userCredential = await FirebaseAuth
+                      .instance
+                      .signInWithEmailAndPassword(
+                    email: email,
+                    password: pass,
+                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return HomePageScreen();
+                      },
+                    ),
+                  );
+                } on FirebaseAuthException catch (e) {
+                  if (e.code == "user-not-found") {
+                    // Show error dialog
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return FormatDialog(
+                          styleText: TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                          styleSubText: TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400),
+                          text: "Login failed",
+                          subtext:
+                          "User not found. Please check your email and try again.",
                         );
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return HomePageScreen();
-                            },
+                      },
+                    );
+                  } else if (e.code == "wrong-password") {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return FormatDialog(
+                          styleText: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
                           ),
+                          styleSubText: TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400),
+                          text: "Login failed",
+                          subtext:
+                          "Wrong email or password. Please try again.",
                         );
-                      } on FirebaseAuthException catch (e) {
-                        if (e.code == "user-not-found") {
-                          // Show error dialog
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return FormatDialog(
-                                styleText: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                                styleSubText: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w400),
-                                text: "Login failed",
-                                subtext:
-                                    "User not found. Please check your email and try again.",
-                              );
-                            },
-                          );
-                        } else if (e.code == "wrong-password") {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return FormatDialog(
-                                styleText: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                styleSubText: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w400),
-                                text: "Login failed",
-                                subtext:
-                                    "Wrong email or password. Please try again.",
-                              );
-                            },
-                          );
-                        }
-                      }
-                      setState(() {
-                        _isLoading = false;
-                      });
-                    },
-                    text: 'LOG IN',
-                  ),
+                      },
+                    );
+                  }
+                }
+                setState(() {
+                  _isLoading = false;
+                });
+              },
+              text: 'LOG IN',
+            ),
             AccountCheck(
               text: 'Don\'t have an account?',
               textBtn: ' Sign up',
@@ -177,7 +184,11 @@ class _BodyState extends State<Body> {
             ),
             RoundedOutlineButton(
               textBtn: 'Sign in with Google',
-              press: () {},
+              press: () async {
+                await FirebaseServices().signInWithGoogle();
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomePageScreen()));
+              },
               icon: 'assets/icons/google.png',
               margin: size.width * 0.14,
             ),
@@ -199,3 +210,5 @@ class _BodyState extends State<Body> {
     );
   }
 }
+
+

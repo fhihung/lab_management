@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Lab Manager',
+      title: 'TTT',
       debugShowCheckedModeBanner: false,
       theme: TAppTheme.lightTheme,
       home: WelcomeScreen(),
